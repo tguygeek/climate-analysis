@@ -38,3 +38,25 @@ def monthly_averages(records):
         totals[month] = totals.get(month, 0.0) + float(r['temperature'])
         counts[month] = counts.get(month, 0) + 1
     return {m: round(totals[m] / counts[m], 2) for m in sorted(totals)}
+
+
+def warmest_and_coldest_months(records):
+    """Identify warmest and coldest months by average temperature.
+
+    Each record must have 'date' (YYYY-MM-DD) and 'temperature' keys.
+    Returns a dict with 'warmest' and 'coldest' tuples (month, avg_temp).
+    """
+    if not records:
+        return {"warmest": None, "coldest": None}
+
+    avgs = monthly_averages(records)
+    if not avgs:
+        return {"warmest": None, "coldest": None}
+
+    warmest_month = max(avgs, key=avgs.get)
+    coldest_month = min(avgs, key=avgs.get)
+
+    return {
+        "warmest": (warmest_month, avgs[warmest_month]),
+        "coldest": (coldest_month, avgs[coldest_month])
+    }
